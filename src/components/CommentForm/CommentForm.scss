@@ -1,0 +1,12 @@
+.CommentForm {
+  margin-top: 1em;
+
+  &__control,
+  &__actions {
+    margin-top: 1em;
+  }
+
+  &__actions button {
+    margin-right: 1em;
+  }
+}

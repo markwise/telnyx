@@ -7,6 +7,7 @@ const paths = {}
 paths.dist = path.resolve(__dirname, 'dist')
 paths.src = path.resolve(__dirname, 'src')
 paths.components = path.resolve(paths.src, 'components')
+paths.services = path.resolve(paths.src, 'services')
 
 export default {
   entry: './src/index.js',
@@ -45,7 +46,8 @@ export default {
   resolve: {
     alias: {
       src: paths.src,
-      components: paths.components
+      components: paths.components,
+      services: paths.services
     },
 
     extensions: ['.js', '.jsx', '.json']

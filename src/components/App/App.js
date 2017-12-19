@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Navigation from 'components/Navigation'
 
-const App = ({ children }) => (
+const App = ({children}) => (
   <div className="App">
     <Navigation/>
     <div className='mx-3'>{children}</div>

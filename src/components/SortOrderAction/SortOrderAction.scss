@@ -1,0 +1,11 @@
+.SortOrderAction {
+  &:not(:first-child) {
+    margin-left: .5em;
+  }
+
+  &--active {
+    pointer-events: none;
+    color: #000;
+    text-decoration: underline;
+  }
+}
