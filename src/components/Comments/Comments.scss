@@ -1,0 +1,33 @@
+.Comments {
+  margin-top: 2em;
+}
+
+.Comment {
+  margin-top: 2em;
+  border-top: 1px solid #ddd;
+  padding-top: 1em;
+
+  &__user {
+    margin: 0;
+  }
+
+  &__date {
+    font-size: .8em;
+    font-style: italic;
+    color: #aaa;
+  }
+
+  &__content {
+    margin: 1em 0;
+  }
+
+  &__replies {
+    margin-left: 3em;
+  }
+}
+
+.CommentForm {
+
+
+
+}

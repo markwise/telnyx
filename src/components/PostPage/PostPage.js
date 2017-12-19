@@ -1,6 +1,12 @@
 import React, {Component} from 'react'
-import Comments from 'components/Comments'
-import {fetchPostBySlug, fetchCommentsByPostId} from 'src/services'
+import {Post} from 'components/Posts'
+import Comments, {Comment} from 'components/Comments'
+import {
+  fetchPostBySlug,
+  fetchCommentsByPostId,
+  createComment
+} from 'src/services'
+
 
 class PostPage extends Component {
   constructor(props) {
@@ -23,25 +29,39 @@ class PostPage extends Component {
       history.replace(location.pathname, {post})
     }
 
-    // We could also store comments in history state
-    let comments = await fetchCommentsByPostId(post.id)
-    this.setState({post, comments})
+    this.setState({post})
+    this.fetchComments(post.id)
   }
 
-  handleCreateComment(comment) {
-    console.log('creat comment')
-    console.log(comment)
+  async handleCreateComment(postId, comment) {
+    await createComment(postId, comment)
+    this.fetchComments(postId)
+  }
+
+  async fetchComments(postId) {
+    let data = await fetchCommentsByPostId(postId)
+    this.setState({...data})
   }
 
   render() {
-    let {post, comments} = this.state
+    let {post, comments, commentsCount} = this.state
 
     return (
       <div className="PostPage">
-        <Comments
-          comments={comments}
-          onCreateComment={this.handleCreateComment}
-        />
+        <Post post={post} full={true} />
+        <section>
+          <h3>Comments ({commentsCount})</h3>
+          <div>
+            <Comment
+              comment={{id: null, postId: post.id}}
+              onCreateComment={this.handleCreateComment}
+            />
+          </div>
+          <Comments
+            comments={comments}
+            onCreateComment={this.handleCreateComment}
+          />
+        </section>
       </div>
     )
   }

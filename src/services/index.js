@@ -23,5 +23,17 @@ export const fetchCommentsByPostId = async id => {
     }
   })
 
-  return comments
+  return {comments, commentsCount: data.length}
+}
+
+export const createComment = async (postId, comment) => {
+  let res = await fetch(`${api}/posts/${postId}/comments`, {
+    method: 'post',
+    body: JSON.stringify(comment),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+
+  return await res.json()
 }

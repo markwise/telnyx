@@ -1,5 +1,21 @@
 import React, {Component} from 'react'
+import './Comments.scss'
 
+/**
+ * Uses depth first traversal to recursively create the comments tree.
+ *
+ * @param {Array} ids
+ *    An array of comment id's.
+ *
+ * @param {Object} comments
+ *    The comments lookup table.
+ *
+ * @param {Object} props
+ *    Additional props passed to the Comment component.
+ *
+ * @returns {Array}
+ *    An array of top level Comment components.
+*/
 const createComments = (ids, comments, props) => (
   ids.map(id => {
     let comment = comments[id]
@@ -8,15 +24,24 @@ const createComments = (ids, comments, props) => (
     return (
       <Comment {...props} comment={comment} key={id}>
         {replies.length > 0 &&
-          <ul>
+          <div className="Comment__replies">
             {createComments(replies, comments, props)}
-          </ul>
+          </div>
         }
       </Comment>
     )
   })
 )
 
+
+/**
+ * Returns an array of top level comment id's.
+ *
+ * @param {Object} comments
+ *    The comments lookup table.
+ *
+ * @returns {Array}
+ */
 const getTopLevelCommentIds = comments => (
   Object.entries(comments).reduce((ids, [id, comment]) => (
     comment.parentId === null ? [...ids, id] : ids
@@ -50,7 +75,8 @@ class CommentForm extends Component {
   }
 
   render() {
-    let {props, state} = this
+    let {name, comment} = this.state
+    let willSubmit = name.trim().length > 0 && comment.trim().length > 0
 
     return (
       <form
@@ -62,7 +88,7 @@ class CommentForm extends Component {
           <input
             type="text"
             name="name"
-            value={state.name}
+            value={name}
             onChange={this.handleChange}
           />
         </div>
@@ -70,13 +96,13 @@ class CommentForm extends Component {
           <label>Comment</label>
           <textarea
             name="comment"
-            value={state.comment}
+            value={comment}
             onChange={this.handleChange}
            />
         </div>
         <div>
           <a href="#" onClick={this.handleCancel}>Cancel</a>
-          <button type="submit">Reply</button>
+          <button type="submit" disabled={!willSubmit}>Post Comment</button>
         </div>
       </form>
     )
@@ -107,8 +133,10 @@ class Comment extends Component {
   handleSaveComment(reply) {
     let {comment, onCreateComment} = this.props
 
-    onCreateComment({
-      postId: comment.postId,
+    // If the user can edit comments, we could either call onUpdateComment or
+    // onCreateComment here.
+
+    onCreateComment(comment.postId, {
       parent_id: comment.id,
       date: new Date().toISOString().substr(0, 10),
       user: reply.name,
@@ -121,17 +149,24 @@ class Comment extends Component {
   render() {
     let {comment, children} = this.props
     let {showCommentForm} = this.state
+    let isRootComment = !(comment.user && comment.date && comment.content)
 
     return (
-      <li className="Comment">
+      <div className={isRootComment ? '' : 'Comment'}>
         <div>
-          <header>
-            <h5>{comment.user}</h5>
-            <div>{new Date(comment.date).toDateString()}</div>
-          </header>
-          <div>{comment.content}</div>
+          {!isRootComment &&
+            <div>
+              <header>
+                <h5 className="Comment__user">{comment.user}</h5>
+                <span className="Comment__date">{new Date(comment.date).toDateString()}</span>
+              </header>
+              <div className="Comment__content">{comment.content}</div>
+            </div>
+          }
           <div>
-            <a href="#" onClick={this.handleToggleCommentForm}>Reply</a>
+            <a href="#" onClick={this.handleToggleCommentForm}>
+              {isRootComment ? 'Add Comment' : 'Reply'}
+            </a>
           </div>
           {showCommentForm &&
             <CommentForm
@@ -141,10 +176,12 @@ class Comment extends Component {
           }
         </div>
         {children}
-      </li>
+      </div>
     )
   }
 }
+
+export {Comment}
 
 
 const Comments = ({comments, onCreateComment}) => {
@@ -152,9 +189,7 @@ const Comments = ({comments, onCreateComment}) => {
 
   return (
     <div className="Comments">
-      <ul>
-        {createComments(ids, comments, {onCreateComment})}
-      </ul>
+      {createComments(ids, comments, {onCreateComment})}
     </div>
   )
 }
