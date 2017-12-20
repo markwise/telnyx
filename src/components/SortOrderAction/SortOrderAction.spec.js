@@ -85,9 +85,9 @@ describe('render', () => {
 it('should call `onSortOrder` event handler', () => {
   let spy = jest.fn()
   let wrapper = createWrapper(mount, {order: 'asc', onSortOrder: spy})
-  expect(spy.mock.calls.length).toBe(0)
+  expect(spy).not.toHaveBeenCalled()
   wrapper.simulate('click')
-  expect(spy.mock.calls.length).toBe(1)
+  expect(spy).toHaveBeenCalled()
   // The order prop should be passed to the onSortOrder handler
-  expect(spy.mock.calls[0][0]).toBe('asc')
+  expect(spy).toHaveBeenCalledWith('asc')
 })
