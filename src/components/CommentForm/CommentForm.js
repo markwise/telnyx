@@ -40,8 +40,7 @@ class CommentForm extends Component {
       <form
         className="CommentForm"
         autoComplete="off"
-        onSubmit={this.handleSubmit}
-      >
+        onSubmit={this.handleSubmit}>
         <div className="CommentForm__control">
           <label>Name</label>
           <div>
@@ -64,8 +63,18 @@ class CommentForm extends Component {
           </div>
         </div>
         <div className="CommentForm__actions">
-          <button type="submit" disabled={!willSubmit}>Post Comment</button>
-          <a href="#" onClick={this.handleCancel}>Cancel</a>
+          <button
+            className="CommentForm__submit"
+            type="submit"
+            disabled={!willSubmit}>
+            Post Comment
+          </button>
+          <a
+            className="CommentForm__cancel"
+            href="#"
+            onClick={this.handleCancel}>
+            Cancel
+          </a>
         </div>
       </form>
     )
