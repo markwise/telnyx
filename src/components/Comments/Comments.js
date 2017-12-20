@@ -89,7 +89,6 @@ class Comment extends Component {
 
     // If the user was able to edit comments, we could either call
     // onUpdateComment or onCreateComment here.
-
     onCreateComment(comment.postId, {
       parent_id: comment.id,
       date: new Date().toISOString().substr(0, 10),
@@ -112,7 +111,9 @@ class Comment extends Component {
             <div>
               <header>
                 <h5 className="Comment__user">{comment.user}</h5>
-                <span className="Comment__date">{new Date(comment.date).toDateString()}</span>
+                <span className="Comment__date">
+                  {new Date(comment.date).toDateString()}
+                </span>
               </header>
               <div className="Comment__content">{comment.content}</div>
             </div>

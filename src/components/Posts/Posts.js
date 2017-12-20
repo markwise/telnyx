@@ -11,10 +11,11 @@ export const Post = ({post, full = false}) => {
         {full ? (
           <span>{post.title}</span>
         ) : (
-          <Link to={{
-            pathname: `/blog/${post.slug}`,
-            state: {post}
-          }}>
+          <Link
+            to={{
+              pathname: `/blog/${post.slug}`,
+              state: {post}
+            }}>
             {post.title}
           </Link>
         )}

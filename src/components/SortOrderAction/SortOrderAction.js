@@ -29,8 +29,7 @@ class SortOrderAction extends Component {
       <a
         className={`SortOrderAction ${isActive ? 'SortOrderAction--active' : ''}`}
         href="#"
-        onClick={this.handleSortOrder}
-      >
+        onClick={this.handleSortOrder}>
         {label}
       </a>
     )
